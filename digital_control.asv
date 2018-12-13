@@ -29,10 +29,9 @@ step(Gsnew)
 Kp = 8;     %ideal 8
 Ki = 10;    %ideal 10
 Kd = 6;     %ideal 6
-% test = pidTuner(Gsnew,"PIDF")
 PID = pid(Kp,Ki,Kd);
 C = PID ;
-sysPID = feedback(C*Gs,1);
+sysPID = feedback(C*Gsnew,1);
 % figure("name","step response controller")
 % step(C)
 [yPID,t] = step(sysPID);
@@ -40,3 +39,15 @@ sserror=abs(1-yPID(end)) %get the steady state error
 S = stepinfo(sysPID)
 figure("name","step response Gsnew with PID controller")
 step(sysPID)
+%% PIDD
+Kp = 10;
+Ki = 15;
+Kd = 9;
+Kdd = 5;
+PIDD = pid(Kp,Ki,Kd) + Kdd/(s^2);
+sysPIDD = feedback(PIDD*Gsnew,1);
+[yPIDD,t] = step(sysPIDD);
+sserror=abs(1-yPIDD(end)) %get the steady state error
+S = stepinfo(sysPIDD)
+figure("name","step response Gsnew with PIDD controller")
+step(sysPIDD)
