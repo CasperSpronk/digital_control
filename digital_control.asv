@@ -5,8 +5,8 @@ close all
 s = tf('s');
 Gs = (-1.8 * (s + 0.02) * (s + 0.5)) / ((s^2 + 1.2 * s + 12) * (s^2 + 0.01 * s + 0.0025));
 Gtest = (s + 0.02) / (s^2 + 1.2 * s + 12);
-Gsnum = [-1.8 -0936 -0.018];
-Gsdenom = [1 1.21 12.01 0.123 0.03];
+Gsnum = [-1.8 -0936 - 
+Gsdenom = (s^2 + 1.2 * s + 12) * (s^2 + 0.01 * s + 0.0025);
 %% Creating a PID controller
 % goals:  minimal settling time
 %         overshoot < 5%
@@ -17,8 +17,6 @@ Z = zero(Gs);
 if abs(P(1)/P(3)) > 5
     disp("P(1)/P(3) > 5")
     Gsnew = (-1.8 * (s + 0.02) * (s + 0.5)) / (s^2 + 0.01 * s + 0.0025);
-    Gsnewnum = [-1.8 -0936 -0.018];
-    Gsnewdenom = [1 0.01 0.0025];
 end
 %% Step Response of Gs and Gs new
 close all
@@ -75,11 +73,11 @@ figure("name","ramp response")
 step(sysNewPID/s)
 %% rlocus
 figure
-rlocus(Gsnew)
+rlocus(Gs)
 zeta = 0.7;
 wn = 1.8;
 sgrid(zeta,wn)
-[k,poles] = rlocfind(Gsnew)
+[k,poles] = rlocfind(Gs)
 
 sys_cl = feedback(k*Gs,1)
 step(sys_cl)
